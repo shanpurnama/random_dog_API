@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const dogosController = require('../controllers/controllerDoggos')
+const doggosController = require('../controllers/doggosController')
 
-router.get('/getAllDoggos', dogosController.getAllDoggos)
-router.get('/random', dogosController.random)
+router.get('/getAll', doggosController.getAllDoggos)
+router.get('/random', doggosController.random)
 
 
 module.exports = router

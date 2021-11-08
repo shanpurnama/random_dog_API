@@ -7,9 +7,11 @@ const bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
 
-const routerDoggos = require('./routers/doggos')
-app.use('/doggos', routerDoggos)
-// app.use('/getRandomDoggos', routerDoggos)
+const doggosRouter = require('./routers/doggos')
+app.use('/doggos', doggosRouter)
+
+const userRouter = require('./routers/user')
+app.use('/users', userRouter)
 
 
 
