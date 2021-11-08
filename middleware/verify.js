@@ -17,37 +17,40 @@ function authenticate(req, res, next) {
 
 
 
-// function authorize(req, res, next) {
-//     try {
-//         const decode = jwt.verify(req.headers.token, process.env.PRIVATE_KEY)
-//         const sql = `
-//         SELECT *
-//         FROM
-//             users
-//         WHERE
-//             users.id = '${req.params.id}'`
-//         favouriteDogDb.query(sql, function(err, data) {
-//             if (err) {
-//                 console.log(err)
-//                 res.status(500).json({
-//                     message: 'Internal Server Error'
-//                 })
-//             } else {
-//                 next()
-//                 res.status(200).json({
-//                     message: 'successfully',
-//                     data
-//                 })
-//             }
-//         })
-//     } catch(err) {
-//         res.status(400).json({
-//             message: 'cant run'
-//         })
-//     }
-// }
+function authorize(req, res, next) {
+    try {
+        const decode = jwt.verify(req.headers.token, process.env.PRIVATE_KEY)
+        const sql = `
+        SELECT *
+        FROM
+            users
+        WHERE
+            users.id = '${req.params.id}'`
+        favouriteDogDb.query(sql, function(err, data) {
+            if (err) {
+                console.log(err)
+                res.status(500).json({
+                    message: 'Internal Server Error'
+                })
+            } else {
+                if (data[0].id === decode.id) {
+                    next()
+                } else {
+                    console.log(err)
+                    res.status(400).json({
+                        message: 'Unautorized'
+                    })
+                }
+            } 
+        })
+    } catch(err) {
+        res.status(400).json({
+            message: 'unautorize'
+        })
+    }
+}
 
 module.exports = {
     authenticate,
-    // authorize
+    authorize
 }

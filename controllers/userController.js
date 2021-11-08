@@ -11,6 +11,9 @@ function getAll(req, res) {
                 message: 'Internal Server Error'
             })
         } else {
+            for (var i = 0; i < data.length; i++) {
+                data[i].favourite_dog = JSON.parse(data[i].favourite_dog)
+            }
             res.status(200).json({
                 message: 'OK SUCCESFULLY',
                 data
@@ -91,6 +94,7 @@ function login(req, res) {
                     })
                 } else {
                     var token = jwt.sign({ 
+                        id: data[0].id,
                         email: data[0].email}, 
                         process.env.PRIVATE_KEY)
                     res.status(200).json({
@@ -104,9 +108,6 @@ function login(req, res) {
 }
 
 function addToFavourite(req, res) {
-    // console.log('masukkk nih')
-    // console.log(req.params.id)
-    // console.log(req.body.favourite)
     const sql = `
     UPDATE
         users
@@ -126,49 +127,10 @@ function addToFavourite(req, res) {
                 message: 'Internal Server Error'
             })
         } else {
-            // const newData = JSON.parse(data)
             res.status(200).json({
                 message: 'OK success update',
                 data
             })
-            // console.log(JSON.parse(data[0].favourite_dog))
-            // var tampung = []
-            // for (var i = 0; i < data.length; i++) {
-            //     // console.log(data[i])
-            //     tampung.push(JSON.parse(data[i]))
-            //     console.log(tampung)
-            // }
-            // console.log(JSON.parse(data.favourite_dog))
-            // console.log(JSON.parse(req.body.favourite))
-            // console.log(contoh)
-            // var tampung =  []
-            // for (var i = 0; i < req.body.favourite.length; i++) {
-            //     console.log(JSON.stringify(req.body.favourite[i]))
-                // tampung += req.body.favourite[i]
-            // }
-            // console.log(tampung)
-            // console.log(data)
-            // const tampung = []
-            // for (var i = 0; i < data.length; i++) {
-            //     // console.log(JSON.parse(data[i].favourite_dog))
-            //     tampung.push(JSON.parse(data[i].favourite_dog))
-            // }
-            // console.log(tampung)
-            // for (var i = 0; i < data[0].length; i++) {
-            //     console.log(data[i][0])
-            // }
-            
-            // console.log(tampung)
-            // console.log(JSON.parse(tampung))
-            // console.log(data[0])
-            // for (var i = 0; i < data.length; i++) {
-            //     console.log(JSON.parse(data[i].favourite_dog))
-            // }
-            // res.status(200).json({
-            //     message: 'OK success update',
-            //     // tampung
-            //     data
-            // })
         }
     })
 }

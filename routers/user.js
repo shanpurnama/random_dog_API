@@ -11,6 +11,6 @@ router.post('/register', userController.register)
 router.post('/login', userController.login)
 
 
-router.post('/addToFavourite/:id', verify.authenticate, userController.addToFavourite)
+router.post('/addToFavourite/:id', verify.authenticate, verify.authorize, userController.addToFavourite)
 
 module.exports = router
