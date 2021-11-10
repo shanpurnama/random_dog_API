@@ -7,10 +7,12 @@ function getAll(req, res) {
     var sql = 'SELECT * FROM users'
     schoolDB.query(sql, function(err, data) {
         if (err) {
+            console.log(err)
             res.status(500).json({
                 message: 'Internal Server Error'
             })
         } else {
+            // console.log(JSON.stringify(data[0].favourite_dog))
             for (var i = 0; i < data.length; i++) {
                 data[i].favourite_dog = JSON.parse(data[i].favourite_dog)
             }
@@ -29,6 +31,7 @@ function register(req, res) {
     const sql = 'SELECT * FROM users WHERE ?'
     schoolDB.query(sql, data, function(err) {
         if (err) {
+            console.log(err)
             res.status(500).json({
                 message: 'Internal Server Error'
             })
@@ -75,6 +78,7 @@ function login(req, res) {
     }
     schoolDB.query('SELECT * FROM users WHERE ?', dataEmail, function(err, data) {
         if (err) {
+            console.log(err)
             res.status(500).json({
                 message: 'Internal Server Error'
             })
@@ -85,6 +89,7 @@ function login(req, res) {
         } else {
             bcrypt.compare(req.body.password, data[0].password, function(err, result) {
                 if (err) {
+                    console.log(err)
                     res.status(500).json({
                         message: 'Internal Server Error'
                     })
@@ -108,6 +113,7 @@ function login(req, res) {
 }
 
 function addToFavourite(req, res) {
+    // console.log(req.body.favourite)
     const sql = `
     UPDATE
         users
