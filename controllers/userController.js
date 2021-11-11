@@ -12,7 +12,6 @@ function getAll(req, res) {
                 message: 'Internal Server Error'
             })
         } else {
-            // console.log(JSON.stringify(data[0].favourite_dog))
             for (var i = 0; i < data.length; i++) {
                 data[i].favourite_dog = JSON.parse(data[i].favourite_dog)
             }
@@ -52,6 +51,7 @@ function register(req, res) {
                         id: uuid,
                         email: req.body.email,
                         password: hash,
+                        favourite_dog: '[]'
                     }
                     var sql = 'INSERT INTO users SET ?'
                     schoolDB.query(sql, dataTeacher, function(err) {
@@ -112,8 +112,51 @@ function login(req, res) {
     })
 }
 
+// function addToFavourite(req, res) {
+//     var sql = `SELECT * FROM users WHERE id = '${req.params.id}'`
+//     schoolDB.query(sql, function(err, data) {
+//         if (err) {
+//             console.log(err)
+//             res.status(500).json({
+//                 message: 'Internal Server Error'
+//             })
+//         } else {
+//             const userData = data[0]
+//             userData.favourite_dog = JSON.parse(data[0].favourite_dog)
+//             userData.favourite_dog.push(req.body.link)
+
+//             const updateData = `
+//             UPDATE
+//                 users
+//             SET?
+//             WHERE
+//                 id = '${req.params.id}'`
+//             const dataUser = [
+//                 {
+//                     favourite_dog: JSON.stringify(userData.favourite_dog)
+//                 }
+//             ]
+//             schoolDB.query(updateData, dataUser, function(err) {
+//                 if (err) {
+//                     console.log(err)
+//                     res.status(500).json({
+//                         message: 'Internal Server Error'
+//                     })
+//                 } else {
+//                     res.status(200).json({
+//                         message: 'OK success update',
+//                     })
+//                 }
+//             })
+//         }
+//     })
+// }
+
 function addToFavourite(req, res) {
-    // console.log(req.body.favourite)
+    // console.log(req.body.link)
+    // req.favourite.favourite_dog = JSON.parse(data[0].favourite_dog)
+    // console.log(req.favourite.push(req.body.link))
+    req.favourite.push(req.body.link)
     const sql = `
     UPDATE
         users
@@ -123,7 +166,7 @@ function addToFavourite(req, res) {
 
     const data = [
         {
-            favourite_dog: JSON.stringify(req.body.favourite)
+            favourite_dog: JSON.stringify(req.favourite)
         }
     ]
     schoolDB.query(sql, data, function(err) {
@@ -135,7 +178,6 @@ function addToFavourite(req, res) {
         } else {
             res.status(200).json({
                 message: 'OK success update',
-                data
             })
         }
     })
