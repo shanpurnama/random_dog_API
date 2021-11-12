@@ -12,6 +12,34 @@ function getAll(req, res) {
                 message: 'Internal Server Error'
             })
         } else {
+            console.log(data)
+            for (var i = 0; i < data.length; i++) {
+                data[i].favourite_dog = JSON.parse(data[i].favourite_dog)
+            }
+            res.status(200).json({
+                message: 'OK SUCCESFULLY',
+                data
+            })
+        }
+    })
+}
+
+
+function getOneByUserId(req, res) {
+    var sql = `
+    SELECT 
+        *
+    FROM 
+        users
+    WHERE
+        id = '${req.params.id}'`
+    schoolDB.query(sql, function(err, data) {
+        if (err) {
+            console.log(err)
+            res.status(500).json({
+                message: 'Internal Server Error'
+            })
+        } else {
             for (var i = 0; i < data.length; i++) {
                 data[i].favourite_dog = JSON.parse(data[i].favourite_dog)
             }
@@ -157,6 +185,7 @@ function addToFavourite(req, res) {
     // req.favourite.favourite_dog = JSON.parse(data[0].favourite_dog)
     // console.log(req.favourite.push(req.body.link))
     req.favourite.push(req.body.link)
+    // req.favourite.slice()
     const sql = `
     UPDATE
         users
@@ -182,9 +211,43 @@ function addToFavourite(req, res) {
         }
     })
 }
+
+
+function deleteFavourite(req, res) {
+    // console.log(req.favourite)
+    req.favourite.splice(req.favourite, 1)
+    const sql = `
+    UPDATE
+        users
+    SET?
+    WHERE
+        id = '${req.params.id}'`
+
+    const data = [
+        {
+            favourite_dog: JSON.stringify(req.favourite)
+        }
+    ]
+    schoolDB.query(sql, data, function(err) {
+        if (err) {
+            console.log(err)
+            res.status(500).json({
+                message: 'Internal Server Error'
+            })
+        } else {
+            res.status(200).json({
+                message: 'OK success delete',
+            })
+        }
+    })
+}
+
+
 module.exports = {
     getAll,
     register,
     login,
-    addToFavourite
+    addToFavourite,
+    deleteFavourite,
+    getOneByUserId
 }
